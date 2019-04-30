@@ -34,13 +34,9 @@ export default class FollowerController {
       await Follower.findOrCreate({
         where: { followingId: user.id, followerId: id }
       }).spread((follower, created) => {
-        if (created) {
-          return res.status(CREATED).json({ message: "Follow successful" });
-        }
-        return next();
-        // return res.status(CONFLICT).json({
-        //   message: "You are already following this author"
-        // });
+        return created
+          ? res.status(CREATED).json({ message: "Follow successful" })
+          : next();
       });
     } catch (error) {
       res.status().json({ message: SERVER_ERROR });
@@ -74,7 +70,7 @@ export default class FollowerController {
         message: "You have unfollowed this author"
       });
     } catch (error) {
-      res.status(INTERNAL_SERVER_ERROR).json({ message: SERVER_ERROR });
+      return res.status(INTERNAL_SERVER_ERROR).json({ message: SERVER_ERROR });
     }
   }
 
