@@ -10,31 +10,31 @@ const { Notification } = models;
  */
 
 const articleFavorites = async (id, notification = {}) => {
-  const emailList = new Set();
-  const notifications = [];
-  const usersFavoriteArticle = await checkFavorite.checkWhoFavoriteArticle(id);
+	const emailList = new Set();
+	const notifications = [];
+	const usersFavoriteArticle = await checkFavorite.checkWhoFavoriteArticle(id);
 
-  // eslint-disable-next-line array-callback-return
-  usersFavoriteArticle.map(users => {
-    let email, userId, allowNotifications;
-    if (users.dataValues.author) {
-      ({
-        email,
-        id: userId,
-        allowNotifications
-      } = users.dataValues.author.dataValues);
-    } else {
-      ({ email, id: userId } = users.dataValues);
-    }
-    const user = { email, userId, ...notification };
-    if (allowNotifications) {
-      emailList.add(email);
-    }
+	// eslint-disable-next-line array-callback-return
+	usersFavoriteArticle.map(users => {
+		let email, userId, allowNotifications;
+		if (users.dataValues.author) {
+			({
+				email,
+				id: userId,
+				allowNotifications
+			} = users.dataValues.author.dataValues);
+		} else {
+			({ email, id: userId } = users.dataValues);
+		}
+		const user = { email, userId, ...notification };
+		if (allowNotifications) {
+			emailList.add(email);
+		}
 
-    notifications.push(user);
-  });
-  Notification.bulkCreate(notifications);
-  return [...emailList];
+		notifications.push(user);
+	});
+	Notification.bulkCreate(notifications);
+	return [...emailList];
 };
 /**
  *
@@ -43,43 +43,43 @@ const articleFavorites = async (id, notification = {}) => {
  */
 
 const notifyCommentator = async (id, message) => {
-  const emailList = [];
-  const notifications = [];
-  const commentators = await checkFavorite.checkWhoFavoriteComment(id);
+	const emailList = [];
+	const notifications = [];
+	const commentators = await checkFavorite.checkWhoFavoriteComment(id);
 
-  // eslint-disable-next-line array-callback-return
-  commentators[0].dataValues.likes.map(like => {
-    const { email, id: userId, allowNotifications } = like.dataValues;
-    const user = { email, userId, message };
-    if (allowNotifications) {
-      emailList.push(email);
-    }
-    notifications.push(user);
-  });
-  Notification.bulkCreate(notifications);
-  return emailList;
+	// eslint-disable-next-line array-callback-return
+	commentators[0].dataValues.likes.map(like => {
+		const { email, id: userId, allowNotifications } = like.dataValues;
+		const user = { email, userId, message };
+		if (allowNotifications) {
+			emailList.push(email);
+		}
+		notifications.push(user);
+	});
+	Notification.bulkCreate(notifications);
+	return emailList;
 };
 
 const notifyFollowers = async (id, notification) => {
-  const emailList = [];
-  const followers = await checkFollowers(id);
-  const notifications = [];
+	const emailList = [];
+	const followers = await checkFollowers(id);
+	const notifications = [];
 
-  // eslint-disable-next-line array-callback-return
-  followers.map(follower => {
-    const {
-      email,
-      id: userId,
-      allowNotifications
-    } = follower.dataValues.followings.dataValues;
-    const user = { email, userId, ...notification };
+	// eslint-disable-next-line array-callback-return
+	followers.map(follower => {
+		const {
+			email,
+			id: userId,
+			allowNotifications
+		} = follower.dataValues.followings.dataValues;
+		const user = { email, userId, ...notification };
 
-    if (allowNotifications) {
-      emailList.push(email);
-    }
-    notifications.push(user);
-  });
-  Notification.bulkCreate(notifications);
-  return emailList;
+		if (allowNotifications) {
+			emailList.push(email);
+		}
+		notifications.push(user);
+	});
+	Notification.bulkCreate(notifications);
+	return emailList;
 };
 export default { articleFavorites, notifyCommentator, notifyFollowers };

@@ -1,18 +1,15 @@
-[![Build Status](https://travis-ci.com/andela/Titan-Devs.svg?branch=ch-integrate-travisci-readme-163518672)](https://travis-ci.com/andela/Titan-Devs) [![Test Coverage](https://api.codeclimate.com/v1/badges/7e974cf3061ef7b98fcd/test_coverage)](https://codeclimate.com/github/andela/Titan-Devs/test_coverage)
-[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com) [![Maintainability](https://api.codeclimate.com/v1/badges/7e974cf3061ef7b98fcd/maintainability)](https://codeclimate.com/github/andela/Titan-Devs/maintainability)
+# ReadIT
 
-# Authors Haven - A Social platform for the creative at heart.
+A Social platform for the creative at heart.
 
 ## Vision
 
 Create a community of like minded authors to foster inspiration and innovation
 by leveraging the modern web.
 
----
-
 ## Code style
 
-The style-guide is ESlint-airbnb, and it uses prettier for frommating code. To enable `VS Code + ESLint + prettier` follow the steps below:
+The style-guide is ESlint-airbnb, and it uses prettier for formatting code. To enable `VS Code + ESLint + prettier` follow the steps below:
 
 - `cd root_directory`
 - `yarn add -D prettier eslint eslint eslint-config-prettier eslint-plugin-prettier`
@@ -26,7 +23,7 @@ The style-guide is ESlint-airbnb, and it uses prettier for frommating code. To e
 
 ### Clone the latest version of the repository
 
-`git@github.com:andela/Titan-Devs.git` or `https://github.com/andela/Titan-Devs.git`
+`git@github.com:Musigwa/ReadIT-Backend.git` or `https://github.com/Musigwa/ReadIT-Backend.git`
 
 ### Change directory
 
@@ -40,7 +37,7 @@ The style-guide is ESlint-airbnb, and it uses prettier for frommating code. To e
 
 `yarn` or `npm install`
 
-### Make sure to have the postgres database created for the project
+### Make sure to have the postgreSQL database created for the project
 
 After setting up the database,
 
