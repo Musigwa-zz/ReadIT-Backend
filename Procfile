@@ -1,1 +1,1 @@
-web: db:migrate && start
+web: nodemon --exec babel-node index.js
