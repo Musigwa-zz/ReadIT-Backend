@@ -1,0 +1,1529 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "ReadIT API server",
+    "description": "A Social platform for the creative at heart",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "description": "Create new user in system",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "New user is created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users in system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID of user that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user with given ID",
+        "responses": {
+          "200": {
+            "description": "User is found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user with given ID",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "User is deleted",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user with given ID",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is updated",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "User login",
+        "tags": ["Users"],
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "Allows a user to login.",
+            "schema": {
+              "type": "object",
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email or password"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/articles": {
+      "post": {
+        "tags": ["Articles"],
+        "summary": "Create an article",
+        "description": "This helps the user to create a new article",
+        "parameters": [
+          {
+            "name": "article",
+            "in": "body",
+            "description": "Article properties",
+            "schema": {
+              "$ref": "#/definitions/Article"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED",
+            "schema": {
+              "$ref": "#/definitions/Article"
+            }
+          }
+        }
+      }
+    },
+    "/articles/{slug}/comments/{commentID}/likes": {
+      "post": {
+        "tags": ["Articles"],
+        "summary": "Like a specific comment",
+        "description": "This allows a user to like a specific comment on article.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "commentID",
+            "in": "path",
+            "required": true,
+            "description": "ID for a comment we want to like",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to like a comment",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "comment liked successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "comment": {
+                  "type": "object",
+                  "properties": {
+                    "body": {
+                      "type": "string"
+                    },
+                    "like": {
+                      "type": "integer"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updateddAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "likedBy": {
+                      "type": "object"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "articleId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/articles/{slug}/comments/{commentID}": {
+      "put": {
+        "tags": ["Articles"],
+        "summary": "update a specific comment",
+        "description": "This allows a user to update a specific comment.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "commentID",
+            "in": "path",
+            "required": true,
+            "description": "ID for a comment they want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a comment",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Article properties",
+            "schema": {
+              "$ref": "#/definitions/Article"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "comment updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "comment": {
+                  "type": "object",
+                  "properties": {
+                    "body": {
+                      "type": "string"
+                    },
+                    "like": {
+                      "type": "integer"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updateddAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "likedBy": {
+                      "type": "object"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "articleId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Articles"],
+        "summary": "delete a specific comment",
+        "description": "This allows a user to delete a specific comment.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "commentID",
+            "in": "path",
+            "required": true,
+            "description": "ID for a comment they want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a comment",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "comment updated successfully"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Articles"],
+        "summary": "get a specific comment",
+        "description": "This allows a user to get a specific comment.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "commentID",
+            "in": "path",
+            "required": true,
+            "description": "ID for a comment they want to get",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to get a comment",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "CREATED"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/articles/{slug}/comments/{commentID}/history": {
+      "get": {
+        "tags": ["Articles"],
+        "summary": "get a specific comment history",
+        "description": "This allows a user to get a specific comment history.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "commentID",
+            "in": "path",
+            "required": true,
+            "description": "ID for a comment they want to get",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to get a comment",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/articles/{slug}/comments": {
+      "get": {
+        "tags": ["Articles"],
+        "summary": "get comments for a specific article",
+        "description": "This allows a user to get article with comments.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to get an article with its comments",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/articles/{slug}/highlights/{highlightId}": {
+      "put": {
+        "tags": ["Highlight"],
+        "summary": "update a specific highlight",
+        "description": "This allows a user to update a specific comment.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "highlightId",
+            "in": "path",
+            "required": true,
+            "description": "ID for a highlight you want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a highlight",
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "type": "integer",
+            "description": "the start index of the highlight"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "type": "integer",
+            "description": "the end index of the highlight"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "highlight updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Highlight' "
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Highlight"],
+        "summary": "delete a specific highlight",
+        "description": "This allows a user to delete a specific highlight.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "highlightId",
+            "in": "path",
+            "required": true,
+            "description": "ID for a highlight you want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a highlight",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "highlight deleted  successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Highlight' "
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Highlight"],
+        "summary": "get a specific highlight",
+        "description": "This allows a user to get a specific highlight.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "highlightId",
+            "in": "path",
+            "required": true,
+            "description": "ID for a highlight you want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a highlight",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "highlight retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Highlight' "
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      }
+    },
+    "/articles/{slug}/highlights": {
+      "post": {
+        "tags": ["Highlight"],
+        "summary": "create a specific highlight",
+        "description": "This allows a user to hightlight a specific article.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "highlightId",
+            "in": "path",
+            "required": true,
+            "description": "ID for a highlight you want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a highlight",
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "type": "integer",
+            "description": "the start index of the highlight"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "type": "integer",
+            "description": "the end index of the highlight"
+          },
+          {
+            "name": "comment",
+            "in": "body",
+            "type": "integer",
+            "description": "the text to put on the comment"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "highlight created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Highlight' "
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Highlight"],
+        "summary": "get all highlights made on an article",
+        "description": "This allows a user to hightlight a specific article.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "highlightId",
+            "in": "path",
+            "required": true,
+            "description": "ID for a highlight you want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a highlight",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "highlight has been retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Highlight' "
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      }
+    },
+    "/roles": {
+      "post": {
+        "tags": ["Role"],
+        "summary": "create a specific role",
+        "description": "This allows admin to create a specific role.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "name of the role",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "path",
+            "required": true,
+            "description": "role description",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a highlight",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Role created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Role' "
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Role"],
+        "summary": "get all roles",
+        "description": "This allows admin to get all roles.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to get all roles",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Role"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      }
+    },
+    "/roles/{roleId}": {
+      "get": {
+        "tags": ["Role"],
+        "summary": "get a specific role",
+        "description": "This allows admin to get a specific role.",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "description": "name of the role",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a role",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Role"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Role"],
+        "summary": "update a specific role",
+        "description": "This allows a admin to update a specific role.",
+        "parameters": [
+          {
+            "role": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "description": "ID for a role you want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a role",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "role has been retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Role"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "403": {
+            "description": "Access not granted"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Role"],
+        "summary": "delete a role",
+        "description": "This allows a admin to delete a specific role.",
+        "parameters": [
+          {
+            "role": "slug",
+            "in": "path",
+            "required": true,
+            "description": "slug to represent a particular article",
+            "type": "string"
+          },
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "description": "ID for a role you want to update",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to update a role",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "highlight has been retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Role"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized request"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      }
+    },
+    "/roles/{roleId}/permissions": {
+      "get": {
+        "tags": ["Role"],
+        "summary": "get permissions granted to a specific role",
+        "description": "get permissions granted to a specific role",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "description": "name of the role",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Role"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      }
+    },
+    "/permissions": {
+      "get": {
+        "tags": ["Permission"],
+        "summary": "get all permissions",
+        "description": "This allows admin to get all permission.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to get all permission",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Permission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      }
+    },
+    "/permissions/{roleId}": {
+      "post": {
+        "tags": ["Permission"],
+        "summary": "create a permission",
+        "description": "This allows admin to create a specific permission.",
+        "parameters": [
+          {
+            "name": "permissionId",
+            "in": "path",
+            "required": true,
+            "description": "name of the role",
+            "type": "string"
+          },
+          {
+            "name": "resource",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to create a permission",
+            "type": "string"
+          },
+          {
+            "name": "createPermission",
+            "in": "header",
+            "required": false,
+            "description": "true or false for create Permission field",
+            "type": "boolean"
+          },
+          {
+            "name": "readPermission",
+            "in": "header",
+            "required": false,
+            "description": "true or false for read Permission field",
+            "type": "boolean"
+          },
+          {
+            "name": "updatePermission",
+            "in": "header",
+            "required": false,
+            "description": "true or false for update Permission field",
+            "type": "boolean"
+          },
+          {
+            "name": "deletePermission",
+            "in": "header",
+            "required": false,
+            "description": "true or false for delete Permission field",
+            "type": "boolean"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "Provide a token",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Permission created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Permission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Permission"],
+        "summary": "update a permission",
+        "description": "This allows admin to update a specific permission.",
+        "parameters": [
+          {
+            "name": "permissionId",
+            "in": "path",
+            "required": true,
+            "description": "name of the role",
+            "type": "string"
+          },
+          {
+            "name": "resource",
+            "in": "header",
+            "required": true,
+            "description": "A user has to provide the token in order to create a permission",
+            "type": "string"
+          },
+          {
+            "name": "createPermission",
+            "in": "header",
+            "required": false,
+            "description": "true or false for create Permission field",
+            "type": "boolean"
+          },
+          {
+            "name": "readPermission",
+            "in": "header",
+            "required": false,
+            "description": "true or false for read Permission field",
+            "type": "boolean"
+          },
+          {
+            "name": "updatePermission",
+            "in": "header",
+            "required": false,
+            "description": "true or false for update Permission field",
+            "type": "boolean"
+          },
+          {
+            "name": "deletePermission",
+            "in": "header",
+            "required": false,
+            "description": "true or false for delete Permission field",
+            "type": "boolean"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "provide token",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Permission updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Permission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Permission"],
+        "summary": "get a specifc permission",
+        "description": "This allows admin to get a specific permission.",
+        "parameters": [
+          {
+            "name": "permissionId",
+            "in": "path",
+            "required": true,
+            "description": "name of the role",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "permission retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Permission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Permission"],
+        "summary": "delete a permission",
+        "description": "This allows admin to delete a specific permission.",
+        "parameters": [
+          {
+            "name": "permissionId",
+            "in": "path",
+            "required": true,
+            "description": "name of the role",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "required": true,
+            "description": "Provide a token",
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "permission deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Permission"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access Denied"
+          },
+          "404": {
+            "description": "resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "400'": {
+            "description": "bad request"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "An American ate the African chicken"
+          },
+          "body": {
+            "type": "string",
+            "example": "Ever wonder how the guy got his pocket empty because of the meal?"
+          },
+          "description": {
+            "type": "string",
+            "example": "'It was so delicious'. said the white man who ate the African chicken for his first time in Rwanda."
+          },
+          "tagsList": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "javaScript"
+            }
+          }
+        },
+        "commnents": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "Highlight": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "number",
+          "example": 1
+        },
+        "endIndex": {
+          "type": "number",
+          "example": 3
+        },
+        "comment": {
+          "type": "string",
+          "example": "I realy like this portion"
+        },
+        "userId": {
+          "type": "string",
+          "example": "f3675d47-2d68-4971-a468-43d31d4e9a2d"
+        },
+        "articleId": {
+          "type": "string",
+          "example": "3e6736d5-7bf3-4119-ad08-b8ae6aaaa624"
+        }
+      }
+    },
+    "Role": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "reader"
+        },
+        "description": {
+          "type": "string",
+          "example": "a person who reads or who is fond of reading."
+        }
+      }
+    },
+    "Permission": {
+      "type": "object",
+      "properties": {
+        "resource": {
+          "type": "string",
+          "example": true
+        },
+        "createPermission": {
+          "type": "boolean",
+          "example": false
+        },
+        "readPermission": {
+          "type": "boolean",
+          "example": true
+        },
+        "updatePermission": {
+          "type": "boolean",
+          "example": true
+        },
+        "deletePermission": {
+          "type": "boolean",
+          "example": false
+        }
+      }
+    }
+  }
+}
