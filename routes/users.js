@@ -8,7 +8,6 @@ import checkAuth from "../middlewares/checkAuth";
 import NotificationController from "../controllers/notificationController";
 import validator from "../middlewares/modelValidator";
 
-
 const userRouters = Router();
 
 userRouters.get("/users/confirm/:auth_token", UserController.confirmation);
@@ -41,7 +40,7 @@ userRouters
   .delete(validateRequest, NotificationController.delete)
   .get(validateRequest, NotificationController.fetchOne);
 userRouters.get(
-  "/users/:id/notifications",
+  "/users/notifications",
   checkAuth,
   validateRequest,
   NotificationController.fetchAll
