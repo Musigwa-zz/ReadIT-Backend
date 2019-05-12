@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/Musigwa/ReadIT-Backend.svg?branch=master)](https://travis-ci.org/Musigwa/ReadIT-Backend)
+[![Coverage Status](https://coveralls.io/repos/github/Musigwa/ReadIT-Backend/badge.svg?branch=master)](https://coveralls.io/github/Musigwa/ReadIT-Backend?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/812f2fff559374dc1e22/maintainability)](https://codeclimate.com/github/Musigwa/ReadIT-Backend/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/812f2fff559374dc1e22/test_coverage)](https://codeclimate.com/github/Musigwa/ReadIT-Backend/test_coverage)
 
 # ReadIT
 
