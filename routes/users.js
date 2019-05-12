@@ -36,7 +36,7 @@ userRouters
     UserController.assignRole
   );
 userRouters
-  .route("/users/:id/notifications/:notificationId", checkAuth)
+  .route("/users/notifications/:notificationId", checkAuth)
   .delete(validateRequest, NotificationController.delete)
   .get(validateRequest, NotificationController.fetchOne);
 userRouters.get(
