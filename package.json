@@ -1,5 +1,5 @@
 {
-	"name": "express-authorshaven",
+	"name": "readit-backend",
 	"version": "1.0.0",
 	"description": "A Social platform for the creative at heart",
 	"main": "index.js",
@@ -18,7 +18,7 @@
 		"functions": 80,
 		"branches": 80
 	},
-	"author": " Andela Simulations Programme",
+	"author": "https://github.com/Musigwa/",
 	"license": "MIT",
 	"dependencies": {
 		"@sendgrid/mail": "^6.3.1",
