@@ -39,8 +39,11 @@ userRouters
 userRouters
   .route("/users/notifications/:notificationId", checkAuth)
   .delete(validateRequest, NotificationController.delete)
-  .put(validateRequest, NotificationController.update)
-  .get(NotificationController.fetchOne);
-userRouters.get("/users/notifications", checkAuth, NotificationController.fetchAll);
-
+  .get(validateRequest, NotificationController.fetchOne);
+userRouters.get(
+  "/users/notifications",
+  checkAuth,
+  validateRequest,
+  NotificationController.fetchAll
+);
 export default userRouters;
